@@ -29,6 +29,8 @@ public class ApiTest {
 	private static final String TEAM2_NAME = "Madeup Team 2";
 	private static final String TEAM3_NAME = "Madeup Team 3";
 
+	private String newDivisionId;
+
 	@Before
 	public void setup() throws IOException {
 		Properties prop = new Properties();
@@ -46,7 +48,8 @@ public class ApiTest {
 
 	@After
 	public void tearDown() {
-		//given().delete(SEASON_URL + SEASON_NUMBER);
+		given().delete(SEASON_URL + SEASON_NUMBER);
+		given().delete(DIVISION_URL + newDivisionId);
 	}
 
 	@Test
@@ -74,15 +77,15 @@ public class ApiTest {
 			then().
 				statusCode(HttpStatus.SC_CREATED);
 
-		String divisionId = response.then().contentType(ContentType.JSON).extract().path("data.id");
+		newDivisionId = response.then().contentType(ContentType.JSON).extract().path("data.id");
 
-		whenGet(DIVISION_URL, divisionId).
+		whenGet(DIVISION_URL, newDivisionId).
 				then().
 				statusCode(HttpStatus.SC_OK).
 				assertThat().
 				body("data.attributes.divisionName", equalTo(DIVISION1_NAME));
 
-		whenDelete(DIVISION_URL, divisionId).
+		whenDelete(DIVISION_URL, newDivisionId).
 				then().
 				statusCode(HttpStatus.SC_NO_CONTENT);
 	}
