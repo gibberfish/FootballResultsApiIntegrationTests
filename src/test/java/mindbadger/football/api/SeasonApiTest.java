@@ -80,6 +80,12 @@ public class SeasonApiTest {
 
 	@Test
 	public void shouldThrowAnErrorWhenAttemptToCreateADuplicateSeason () {
-		//TODO Check that an error object is thrown - https://jsonapi.org/examples/#error-objects
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER)).
+				then().
+				statusCode(HttpStatus.SC_CREATED);
+
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER)).
+				then().
+				statusCode(HttpStatus.SC_BAD_REQUEST);
 	}
 }

@@ -87,27 +87,13 @@ public class DivisionApiTest {
 	}
 
 	@Test
-	public void shouldThrowAnErrorWhenAttemptToCreateADuplicateDivision () {
-		//TODO Implement this
-	}
+	public void shouldThrowAnErrorWhenAttemptToCreateADivisionWithADuplicateName () {
+		whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				statusCode(HttpStatus.SC_CREATED);
 
-
-	@Test
-	public void createDivisionCheckAndThenDelete () {
-
-		newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-			then().
-				statusCode(HttpStatus.SC_CREATED).
-				contentType(ContentType.JSON).extract().path("data.id");
-
-		whenGet(DIVISION_URL, newDivisionId).
-			then().
-				statusCode(HttpStatus.SC_OK).
-			assertThat().
-				body("data.attributes.divisionName", equalTo(DIVISION1_NAME));
-
-		whenDelete(DIVISION_URL, newDivisionId).
-			then().
-				statusCode(HttpStatus.SC_NO_CONTENT);
+		whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				statusCode(HttpStatus.SC_BAD_REQUEST);
 	}
 }
