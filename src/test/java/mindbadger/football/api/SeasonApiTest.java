@@ -1,17 +1,13 @@
 package mindbadger.football.api;
 
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.*;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.util.Properties;
-
-import static com.jayway.restassured.RestAssured.given;
-import static mindbadger.football.api.helpers.MessageCreationHelper.*;
+import static mindbadger.football.api.ApiTestConstants.SEASON_NUMBER;
+import static mindbadger.football.api.ApiTestConstants.SEASON_URL;
+import static mindbadger.football.api.helpers.MessageCreationHelper.withSeason;
 import static mindbadger.football.api.helpers.OperationHelper.*;
-import static mindbadger.football.api.ApiTestConstants.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 
@@ -22,13 +18,6 @@ import static org.junit.Assert.assertEquals;
  * Therefore, this test can be run against a 'live' API.
  */
 public class SeasonApiTest extends AbstractRestAssuredTest {
-
-	@After
-	public void deleteTestData() {
-		whenDelete(SEASON_URL, SEASON_NUMBER);
-	}
-
-	// ****************************************************************************
 
 	@Test
 	public void shouldReturnNotFoundWhenGettingNonExistentSeason () {

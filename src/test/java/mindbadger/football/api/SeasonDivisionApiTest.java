@@ -1,16 +1,8 @@
 package mindbadger.football.api;
 
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
 
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.*;
@@ -24,18 +16,6 @@ import static org.hamcrest.Matchers.*;
  * Therefore, this test can be run against a 'live' API.
  */
 public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
-
-	private Set<String> newDivisionIds = new HashSet<>();
-
-	@After
-	public void deleteTestData() {
-		whenDelete(SEASON_URL, SEASON_NUMBER);
-		for (String divisionId : newDivisionIds) {
-			whenDelete(DIVISION_URL, divisionId);
-		}
-	}
-
-	// ****************************************************************************
 
 	@Test
 	public void seasonDivisionHyperlinkForNewSeasonShouldReturnNoSeasonDivisions() {
@@ -126,16 +106,85 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 
 	@Test
 	public void shouldAddNewCanonicalSeasonDivision() {
-		//TODO Implement this
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				contentType(ContentType.JSON).extract().path("data.id");
+
+		newDivisionIds.add(newDivisionId);
+
+		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
+
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
+				then().
+				statusCode(HttpStatus.SC_CREATED).
+				assertThat().
+				body("data.id", equalTo(SEASON_DIVISION_ID));
+
+		whenGet(SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId).
+				then().
+				statusCode(HttpStatus.SC_OK).
+				assertThat().
+				body("data.id", equalTo(SEASON_DIVISION_ID));
 	}
 
 	@Test
 	public void shouldDeleteASeasonDivision() {
-		//TODO Implement this
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				contentType(ContentType.JSON).extract().path("data.id");
+
+		newDivisionIds.add(newDivisionId);
+
+		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
+
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1"));
+
+		whenDelete(SEASON_DIVISION_URL, SEASON_DIVISION_ID).
+			then().
+				statusCode(HttpStatus.SC_NO_CONTENT);
+
+		whenGet(SEASON_DIVISION_URL, SEASON_DIVISION_ID).
+			then().
+				statusCode(HttpStatus.SC_NOT_FOUND);
 	}
 
 	@Test
 	public void shouldThrowAnErrorWhenAttemptToCreateADuplicateSeasonDivision () {
-		//TODO Implement this
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				contentType(ContentType.JSON).extract().path("data.id");
+
+		newDivisionIds.add(newDivisionId);
+
+		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
+
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
+				then().
+				statusCode(HttpStatus.SC_CREATED);
+
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
+				then().
+				statusCode(HttpStatus.SC_CONFLICT);
 	}
+
+	@Test
+	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentSeason () {
+
+	}
+
+	@Test
+	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentDivision () {
+
+	}
+
 }

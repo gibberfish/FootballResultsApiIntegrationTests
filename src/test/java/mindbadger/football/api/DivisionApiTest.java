@@ -1,16 +1,8 @@
 package mindbadger.football.api;
 
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
 
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.withDivision;
@@ -24,17 +16,6 @@ import static org.hamcrest.Matchers.equalTo;
  * Therefore, this test can be run against a 'live' API.
  */
 public class DivisionApiTest extends AbstractRestAssuredTest {
-
-	private Set<String> newDivisionIds = new HashSet<>();
-
-	@After
-	public void deleteTestData() {
-		for (String divisionId : newDivisionIds) {
-			whenDelete(DIVISION_URL, divisionId);
-		}
-	}
-
-	// ****************************************************************************
 
 	@Test
 	public void shouldReturnNotFoundWhenGettingNonExistentDivision () {

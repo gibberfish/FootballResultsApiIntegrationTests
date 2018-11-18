@@ -1,18 +1,9 @@
 package mindbadger.football.api;
 
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-
-import static com.jayway.restassured.RestAssured.given;
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.withTeam;
 import static mindbadger.football.api.helpers.OperationHelper.*;
@@ -25,17 +16,6 @@ import static org.hamcrest.Matchers.equalTo;
  * Therefore, this test can be run against a 'live' API.
  */
 public class TeamApiTest extends AbstractRestAssuredTest {
-
-	private Set<String> newTeamIds = new HashSet<>();
-
-	@After
-	public void deleteTestData() {
-		for (String teamId : newTeamIds) {
-			whenDelete(TEAM_URL, teamId);
-		}
-	}
-
-	// ****************************************************************************
 
 	@Test
 	public void shouldReturnNotFoundWhenGettingNonExistentTeam () {

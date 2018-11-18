@@ -14,6 +14,8 @@ public class ApiTestConstants {
     public static final String SEASON_URL = "seasons/";
     public static final String DIVISION_URL = "divisions/";
     public static final String TEAM_URL = "teams/";
+    public static final String SEASON_DIVISION_URL = "seasonDivisions/";
+
     public static final String SEASON_TO_SEASON_DIVISION_URL = SEASON_URL + SEASON_NUMBER + "/seasonDivisions";
     public static final String SEASON_TO_NON_EXISTENT_SEASON_DIVISION_URL = SEASON_URL + "1700/seasonDivisions";
 
