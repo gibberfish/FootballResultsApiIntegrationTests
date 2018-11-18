@@ -18,6 +18,13 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withTeam (String teamName) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "teams");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("teamName", teamName);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();

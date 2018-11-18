@@ -37,8 +37,8 @@ public class SeasonApiTest {
 	}
 
 	@After
-	public void deleteTestDataAtTheEnd() {
-		given().delete(SEASON_URL + SEASON_NUMBER);
+	public void deleteTestData() {
+		whenDelete(SEASON_URL, SEASON_NUMBER);
 	}
 
 	// ****************************************************************************

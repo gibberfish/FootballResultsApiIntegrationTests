@@ -13,10 +13,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import static com.jayway.restassured.RestAssured.given;
-import static mindbadger.football.api.helpers.MessageCreationHelper.withDivision;
-import static mindbadger.football.api.helpers.MessageCreationHelper.withSeason;
-import static mindbadger.football.api.helpers.OperationHelper.*;
 import static mindbadger.football.api.ApiTestConstants.*;
+import static mindbadger.football.api.helpers.MessageCreationHelper.withTeam;
+import static mindbadger.football.api.helpers.OperationHelper.*;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
@@ -25,14 +24,14 @@ import static org.hamcrest.Matchers.equalTo;
  * This test uses fake data that will be torn-down at the end.
  * Therefore, this test can be run against a 'live' API.
  */
-public class DivisionApiTest {
+public class TeamApiTest {
 
-	private Set<String> newDivisionIds = new HashSet<>();
+	private Set<String> newTeamIds = new HashSet<>();
 
 	@Before
 	public void setup() throws IOException {
 		Properties prop = new Properties();
-		prop.load(DivisionApiTest.class.getClassLoader().getResourceAsStream("application.properties"));
+		prop.load(TeamApiTest.class.getClassLoader().getResourceAsStream("application.properties"));
 
 		String port = prop.getProperty("server.port");
 		RestAssured.port = Integer.valueOf(port);
@@ -46,64 +45,64 @@ public class DivisionApiTest {
 
 	@After
 	public void deleteTestData() {
-		for (String divisionId : newDivisionIds) {
-			whenDelete(DIVISION_URL, divisionId);
+		for (String teamId : newTeamIds) {
+			whenDelete(TEAM_URL, teamId);
 		}
 	}
 
 	// ****************************************************************************
 
 	@Test
-	public void shouldReturnNotFoundWhenGettingNonExistentDivision () {
-		whenGet(DIVISION_URL, NON_EXISTENT_DIVISION_ID).
+	public void shouldReturnNotFoundWhenGettingNonExistentTeam () {
+		whenGet(TEAM_URL, NON_EXISTENT_TEAM_ID).
 			then().
 				statusCode(HttpStatus.SC_NOT_FOUND);
 	}
 
 	@Test
-	public void shouldCreateANewDivision () {
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+	public void shouldCreateANewTeam () {
+		String newTeamId = whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
 				then().
 				statusCode(HttpStatus.SC_CREATED).
 				contentType(ContentType.JSON).extract().path("data.id");
 
-		newDivisionIds.add(newDivisionId);
+		newTeamIds.add(newTeamId);
 
-		whenGet(DIVISION_URL, newDivisionId).
+		whenGet(TEAM_URL, newTeamId).
 			then().
 				statusCode(HttpStatus.SC_OK).
 			assertThat().
-				body("data.attributes.divisionName", equalTo(DIVISION1_NAME));
+				body("data.attributes.teamName", equalTo(TEAM1_NAME));
 	}
 
 	@Test
-	public void shouldDeleteAnExistingDivision () {
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+	public void shouldDeleteAnExistingTeam () {
+		String newTeamId = whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
 			then().
 				statusCode(HttpStatus.SC_CREATED).
 				contentType(ContentType.JSON).extract().path("data.id");
 
-		newDivisionIds.add(newDivisionId);
+		newTeamIds.add(newTeamId);
 
-		whenDelete(DIVISION_URL, newDivisionId).
+		whenDelete(TEAM_URL, newTeamId).
 			then().
 				statusCode(HttpStatus.SC_NO_CONTENT);
 
-		whenGet(DIVISION_URL, newDivisionId).
+		whenGet(TEAM_URL, newTeamId).
 			then().
 				statusCode(HttpStatus.SC_NOT_FOUND);
 	}
 
 	@Test
-	public void shouldThrowAnErrorWhenAttemptToCreateADivisionWithADuplicateName () {
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+	public void shouldThrowAnErrorWhenAttemptToCreateATeamWithADuplicateName () {
+		String newTeamId = whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
 				then().
 				statusCode(HttpStatus.SC_CREATED).
 				contentType(ContentType.JSON).extract().path("data.id");
 
-		newDivisionIds.add(newDivisionId);
+		newTeamIds.add(newTeamId);
 
-		whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+		whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
 				then().
 				statusCode(HttpStatus.SC_BAD_REQUEST);
 	}
