@@ -24,24 +24,9 @@ import static org.hamcrest.Matchers.equalTo;
  * This test uses fake data that will be torn-down at the end.
  * Therefore, this test can be run against a 'live' API.
  */
-public class TeamApiTest {
+public class TeamApiTest extends AbstractRestAssuredTest {
 
 	private Set<String> newTeamIds = new HashSet<>();
-
-	@Before
-	public void setup() throws IOException {
-		Properties prop = new Properties();
-		prop.load(TeamApiTest.class.getClassLoader().getResourceAsStream("application.properties"));
-
-		String port = prop.getProperty("server.port");
-		RestAssured.port = Integer.valueOf(port);
-
-		String basePath = prop.getProperty("server.base");
-		RestAssured.basePath = basePath;
-
-		String baseHost = prop.getProperty("server.host");
-		RestAssured.baseURI = baseHost;
-	}
 
 	@After
 	public void deleteTestData() {
@@ -70,7 +55,7 @@ public class TeamApiTest {
 
 		whenGet(TEAM_URL, newTeamId).
 			then().
-				statusCode(HttpStatus.SC_OK).
+				statusCode(HttpStatus.SC_OK). //TODO This should be SC_CREATED 201
 			assertThat().
 				body("data.attributes.teamName", equalTo(TEAM1_NAME));
 	}

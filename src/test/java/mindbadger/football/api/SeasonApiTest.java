@@ -1,6 +1,7 @@
 package mindbadger.football.api;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.*;
 
@@ -12,6 +13,7 @@ import static mindbadger.football.api.helpers.MessageCreationHelper.*;
 import static mindbadger.football.api.helpers.OperationHelper.*;
 import static mindbadger.football.api.ApiTestConstants.*;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 
 /**
  * These tests are dependent upon a running API - the details of which are configured in the application.properties
@@ -19,22 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
  * This test uses fake data that will be torn-down at the end.
  * Therefore, this test can be run against a 'live' API.
  */
-public class SeasonApiTest {
-
-	@Before
-	public void setup() throws IOException {
-		Properties prop = new Properties();
-		prop.load(SeasonApiTest.class.getClassLoader().getResourceAsStream("application.properties"));
-
-		String port = prop.getProperty("server.port");
-		RestAssured.port = Integer.valueOf(port);
-
-		String basePath = prop.getProperty("server.base");
-		RestAssured.basePath = basePath;
-
-		String baseHost = prop.getProperty("server.host");
-		RestAssured.baseURI = baseHost;
-	}
+public class SeasonApiTest extends AbstractRestAssuredTest {
 
 	@After
 	public void deleteTestData() {
@@ -58,7 +45,7 @@ public class SeasonApiTest {
 
 		whenGet(SEASON_URL, SEASON_NUMBER).
 			then().
-				statusCode(HttpStatus.SC_OK).
+				statusCode(HttpStatus.SC_OK). //TODO This should be SC_CREATED 201
 			assertThat().
 				body("data.id", equalTo(SEASON_NUMBER));
 	}
@@ -87,5 +74,19 @@ public class SeasonApiTest {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER)).
 				then().
 				statusCode(HttpStatus.SC_BAD_REQUEST);
+	}
+
+	@Test
+	public void shouldHaveAHyperlinkToSeasonDivisions () {
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER)).
+				then().
+				statusCode(HttpStatus.SC_CREATED);
+
+		String seasonDivisionUrl = whenGet(SEASON_URL, SEASON_NUMBER).
+			then().
+				contentType(ContentType.JSON).extract().path("data.relationships.seasonDivisions.links.related");
+
+		String expectedUrl = host + ":" + port + basePath + SEASON_URL + SEASON_NUMBER + "/seasonDivisions";
+		assertEquals (expectedUrl, seasonDivisionUrl);
 	}
 }

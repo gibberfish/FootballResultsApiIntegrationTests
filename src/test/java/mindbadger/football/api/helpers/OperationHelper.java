@@ -26,6 +26,14 @@ public class OperationHelper {
                         get(url + id);
     }
 
+    public static Response whenGet(String url) {
+        return
+                given().
+                        header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+                        when().
+                        get(url);
+    }
+
     public static Response whenCreate(String url, JsonObject message) {
         return
                 with().

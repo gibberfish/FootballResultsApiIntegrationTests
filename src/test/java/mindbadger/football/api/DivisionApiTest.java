@@ -12,11 +12,9 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.jayway.restassured.RestAssured.given;
-import static mindbadger.football.api.helpers.MessageCreationHelper.withDivision;
-import static mindbadger.football.api.helpers.MessageCreationHelper.withSeason;
-import static mindbadger.football.api.helpers.OperationHelper.*;
 import static mindbadger.football.api.ApiTestConstants.*;
+import static mindbadger.football.api.helpers.MessageCreationHelper.withDivision;
+import static mindbadger.football.api.helpers.OperationHelper.*;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
@@ -25,24 +23,9 @@ import static org.hamcrest.Matchers.equalTo;
  * This test uses fake data that will be torn-down at the end.
  * Therefore, this test can be run against a 'live' API.
  */
-public class DivisionApiTest {
+public class DivisionApiTest extends AbstractRestAssuredTest {
 
 	private Set<String> newDivisionIds = new HashSet<>();
-
-	@Before
-	public void setup() throws IOException {
-		Properties prop = new Properties();
-		prop.load(DivisionApiTest.class.getClassLoader().getResourceAsStream("application.properties"));
-
-		String port = prop.getProperty("server.port");
-		RestAssured.port = Integer.valueOf(port);
-
-		String basePath = prop.getProperty("server.base");
-		RestAssured.basePath = basePath;
-
-		String baseHost = prop.getProperty("server.host");
-		RestAssured.baseURI = baseHost;
-	}
 
 	@After
 	public void deleteTestData() {
@@ -71,7 +54,7 @@ public class DivisionApiTest {
 
 		whenGet(DIVISION_URL, newDivisionId).
 			then().
-				statusCode(HttpStatus.SC_OK).
+				statusCode(HttpStatus.SC_OK). //TODO This should be SC_CREATED 201
 			assertThat().
 				body("data.attributes.divisionName", equalTo(DIVISION1_NAME));
 	}

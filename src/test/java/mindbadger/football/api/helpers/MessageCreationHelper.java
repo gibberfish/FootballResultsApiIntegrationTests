@@ -25,6 +25,15 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withSeasonDivision (String seasonNumber, String divisionId, String position) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "seasonDivisions");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("position", position);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();
