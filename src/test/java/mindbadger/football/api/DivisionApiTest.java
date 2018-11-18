@@ -48,7 +48,50 @@ public class DivisionApiTest {
 	}
 
 	// ****************************************************************************
-	
+
+	@Test
+	public void shouldReturnNotFoundWhenGettingNonExistentDivision () {
+		whenGet(DIVISION_URL, NON_EXISTENT_DIVISION_ID).
+			then().
+				statusCode(HttpStatus.SC_NOT_FOUND);
+	}
+
+	@Test
+	public void shouldCreateANewDivision () {
+		newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				statusCode(HttpStatus.SC_CREATED).
+				contentType(ContentType.JSON).extract().path("data.id");
+
+		whenGet(DIVISION_URL, newDivisionId).
+			then().
+				statusCode(HttpStatus.SC_OK).
+			assertThat().
+				body("data.attributes.divisionName", equalTo(DIVISION1_NAME));
+	}
+
+	@Test
+	public void shouldDeleteAnExistingDivision () {
+		newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+			then().
+				statusCode(HttpStatus.SC_CREATED).
+				contentType(ContentType.JSON).extract().path("data.id");
+
+		whenDelete(DIVISION_URL, newDivisionId).
+			then().
+				statusCode(HttpStatus.SC_NO_CONTENT);
+
+		whenGet(DIVISION_URL, newDivisionId).
+			then().
+				statusCode(HttpStatus.SC_NOT_FOUND);
+	}
+
+	@Test
+	public void shouldThrowAnErrorWhenAttemptToCreateADuplicateDivision () {
+		//TODO Implement this
+	}
+
+
 	@Test
 	public void createDivisionCheckAndThenDelete () {
 
