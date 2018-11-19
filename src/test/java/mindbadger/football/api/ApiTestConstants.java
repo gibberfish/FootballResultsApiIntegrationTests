@@ -8,6 +8,7 @@ public class ApiTestConstants {
     public static final String TEAM2_NAME = "Madeup Team 2";
     public static final String TEAM3_NAME = "Madeup Team 3";
 
+    public static final String NON_EXISTENT_SEASON_NUM = "1700";
     public static final String NON_EXISTENT_DIVISION_ID = "NoSuchID";
     public static final String NON_EXISTENT_TEAM_ID = "NoSuchID";
 

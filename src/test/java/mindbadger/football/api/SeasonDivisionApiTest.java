@@ -178,13 +178,27 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	}
 
 	@Test
-	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentSeason () {
+	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentDivision () {
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(SEASON_NUMBER, NON_EXISTENT_DIVISION_ID, "1")).
+				then().
+				statusCode(HttpStatus.SC_BAD_REQUEST);
 	}
 
 	@Test
-	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentDivision () {
+	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentSeason () {
+		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				contentType(ContentType.JSON).extract().path("data.id");
 
+		newDivisionIds.add(newDivisionId);
+
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(NON_EXISTENT_SEASON_NUM, newDivisionId, "1")).
+				then().
+				statusCode(HttpStatus.SC_BAD_REQUEST);
 	}
 
 }
