@@ -201,4 +201,46 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 				statusCode(HttpStatus.SC_BAD_REQUEST);
 	}
 
+	@Test
+	public void shouldHaveAHyperlinksToSeasonDivisionTeamsAndFixtureDates () {
+		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
+				then().
+				contentType(ContentType.JSON).extract().path("data.id");
+
+		newDivisionIds.add(newDivisionId);
+
+		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
+
+		whenCreate(SEASON_DIVISION_URL,
+				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
+				then().
+				statusCode(HttpStatus.SC_CREATED).
+				assertThat().
+				body("data.id", equalTo(SEASON_DIVISION_ID));
+
+
+		String divisionHyperlink = host + ":" + port + basePath +
+			SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId + "/division";
+
+		String seasonHyperlink = host + ":" + port + basePath +
+				SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId + "/season";
+
+		String teamsHyperlink = host + ":" + port + basePath +
+				SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId + "/teams";
+
+		String fixtureDatesHyperlink = host + ":" + port + basePath +
+				SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId + "/fixtureDates";
+
+		whenGet(SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId).
+			then().
+			assertThat().
+				body("data.relationships.division.links.related", equalTo(divisionHyperlink)).
+				body("data.relationships.season.links.related", equalTo(seasonHyperlink)).
+				body("data.relationships.teams.links.related", equalTo(teamsHyperlink)).
+				body("data.relationships.fixtureDates.links.related", equalTo(fixtureDatesHyperlink))
+		;
+
+	}
 }
