@@ -8,6 +8,7 @@ import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.*;
 import static mindbadger.football.api.helpers.OperationHelper.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.fail;
 
 /**
  * These tests are dependent upon a running API - the details of which are configured in the application.properties
@@ -173,4 +174,33 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
                 statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
+    @Test
+    public void shouldDeleteASeasonDivisionTeam() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldThrowAnErrorWhenAttemptToCreateADuplicateSeasonDivisionTeam() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionTeamWithANonExistentDivision() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionTeamWithANonExistentSeason() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionTeamWithANonExistentTeam() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldHaveAHyperlinksToSeasonDivisionAndTeam() {
+        fail("Not implemented this test yet.");
+    }
 }
