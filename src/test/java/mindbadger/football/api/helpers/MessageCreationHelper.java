@@ -34,6 +34,15 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withSeasonDivisionTeam (String seasonNumber, String divisionId, String teamId) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "seasonDivisionTeams");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("teamId", teamId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();

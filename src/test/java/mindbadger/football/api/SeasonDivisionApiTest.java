@@ -123,7 +123,7 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 				assertThat().
 				body("data.id", equalTo(SEASON_DIVISION_ID));
 
-		whenGet(SEASON_DIVISION_URL + SEASON_NUMBER + "-" + newDivisionId).
+		whenGet(SEASON_DIVISION_URL, SEASON_DIVISION_ID).
 				then().
 				statusCode(HttpStatus.SC_OK).
 				assertThat().
