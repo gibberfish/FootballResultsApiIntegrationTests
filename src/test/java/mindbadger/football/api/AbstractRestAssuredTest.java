@@ -19,6 +19,7 @@ public class AbstractRestAssuredTest {
 
     protected Set<String> newDivisionIds = new HashSet<>();
     protected Set<String> newTeamIds = new HashSet<>();
+    protected Set<String> newFixtureIds = new HashSet<>();
 
     @Before
     public void setup() throws IOException {
@@ -37,6 +38,9 @@ public class AbstractRestAssuredTest {
 
     @After
     public void deleteTestData() {
+        for (String fixtureId : newFixtureIds) {
+            whenDelete(FIXTURE_URL, fixtureId);
+        }
         whenDelete(SEASON_URL, SEASON_NUMBER);
         for (String divisionId : newDivisionIds) {
             whenDelete(DIVISION_URL, divisionId);

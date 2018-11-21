@@ -7,6 +7,7 @@ import org.junit.Test;
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.*;
 import static mindbadger.football.api.helpers.OperationHelper.*;
+import static mindbadger.football.api.helpers.TestPreConditionHelper.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.fail;
 
@@ -21,20 +22,10 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
     public void seasonDivisionTeamsHyperlinkForNewSeasonDivisionShouldReturnNoSeasonDivisionTeams() {
         whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-        String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
         newDivisionIds.add(newDivisionId);
 
-        final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
-
-        whenCreate(SEASON_TO_SEASON_DIVISION_URL,
-                withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
-                then().
-                statusCode(HttpStatus.SC_CREATED).
-                assertThat().
-                body("data.id", equalTo(SEASON_DIVISION_ID));
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_URL + SEASON_NUMBER +
                 "-" + newDivisionId + "/teams";
@@ -50,22 +41,15 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
     public void shouldAddNewTeamToSeasonDivision() {
         whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-        String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
         newDivisionIds.add(newDivisionId);
 
-        String newTeamId = whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
         newTeamIds.add(newTeamId);
 
         final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId;
 
-        whenCreate(SEASON_TO_SEASON_DIVISION_URL,
-                withSeasonDivision(SEASON_NUMBER, newDivisionId, "1"));
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
         whenCreate(SEASON_DIVISION_TEAM_URL, withSeasonDivisionTeam(SEASON_NUMBER, newDivisionId, newTeamId)).
                 then().
@@ -88,29 +72,19 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
     public void shouldAddMultipleNewTeamsToSeasonDivision() {
         whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-        String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
         newDivisionIds.add(newDivisionId);
 
-        String newTeam1Id = whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newTeam1Id = givenATeamWithName(TEAM1_NAME);
         newTeamIds.add(newTeam1Id);
 
-        String newTeam2Id = whenCreate(TEAM_URL, withTeam(TEAM2_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newTeam2Id = givenATeamWithName(TEAM2_NAME);
         newTeamIds.add(newTeam2Id);
 
         final String SEASON_DIVISION_TEAM1_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeam1Id;
         final String SEASON_DIVISION_TEAM2_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeam2Id;
 
-        whenCreate(SEASON_TO_SEASON_DIVISION_URL,
-                withSeasonDivision(SEASON_NUMBER, newDivisionId, "1"));
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
         whenCreate(SEASON_DIVISION_TEAM_URL, withSeasonDivisionTeam(SEASON_NUMBER, newDivisionId, newTeam1Id)).
                 then().
@@ -138,22 +112,13 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
     public void shouldReturnNotFoundWhenGettingNonExistentSeasonDivisionTeamButSeasonDivisionExists() {
         whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-        String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
         newDivisionIds.add(newDivisionId);
 
-        String newTeamId = whenCreate(TEAM_URL, withTeam(TEAM1_NAME)).
-                then().
-                contentType(ContentType.JSON).extract().path("data.id");
-
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
         newTeamIds.add(newTeamId);
 
-        final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId;
-
-        whenCreate(SEASON_TO_SEASON_DIVISION_URL,
-                withSeasonDivision(SEASON_NUMBER, newDivisionId, "1"));
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_TEAM_URL + SEASON_NUMBER +
                 "-" + newDivisionId + "-NONEXISTENTTEAM";
@@ -176,31 +141,109 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
 
     @Test
     public void shouldDeleteASeasonDivisionTeam() {
-        fail("Not implemented this test yet.");
+        whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newTeamId);
+
+        final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId;
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId);
+
+        whenDelete(SEASON_DIVISION_TEAM_URL, SEASON_DIVISION_TEAM_ID).
+                then().
+                statusCode(HttpStatus.SC_NO_CONTENT);
+
+        whenGet(SEASON_DIVISION_TEAM_URL, SEASON_DIVISION_TEAM_ID).
+                then().
+                statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test
     public void shouldThrowAnErrorWhenAttemptToCreateADuplicateSeasonDivisionTeam() {
-        fail("Not implemented this test yet.");
+        whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId);
+
+        whenCreate(SEASON_DIVISION_TEAM_URL, withSeasonDivisionTeam(SEASON_NUMBER, newDivisionId, newTeamId)).
+                then().
+                statusCode(HttpStatus.SC_CONFLICT);
     }
 
     @Test
     public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionTeamWithANonExistentDivision() {
-        fail("Not implemented this test yet.");
+        whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newTeamId);
+
+        whenCreate(SEASON_DIVISION_TEAM_URL, withSeasonDivisionTeam(SEASON_NUMBER, NON_EXISTENT_DIVISION_ID, newTeamId)).
+                then().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test
     public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionTeamWithANonExistentSeason() {
-        fail("Not implemented this test yet.");
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newTeamId);
+
+        whenCreate(SEASON_DIVISION_TEAM_URL, withSeasonDivisionTeam(NON_EXISTENT_SEASON_NUM, newDivisionId, newTeamId)).
+                then().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test
     public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionTeamWithANonExistentTeam() {
-        fail("Not implemented this test yet.");
+        whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        whenCreate(SEASON_DIVISION_TEAM_URL, withSeasonDivisionTeam(SEASON_NUMBER, newDivisionId, NON_EXISTENT_TEAM_ID)).
+                then().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test
     public void shouldHaveAHyperlinksToSeasonDivisionAndTeam() {
-        fail("Not implemented this test yet.");
+        whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId);
+
+        String seasonDivisionHyperlink = host + ":" + port + basePath +
+                SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId + "/seasonDivision";
+
+        String teamHyperlink = host + ":" + port + basePath +
+                SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId + "/team";
+
+        whenGet(SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId).
+                then().
+                assertThat().
+                body("data.relationships.seasonDivision.links.related", equalTo(seasonDivisionHyperlink)).
+                body("data.relationships.team.links.related", equalTo(teamHyperlink));
     }
 }

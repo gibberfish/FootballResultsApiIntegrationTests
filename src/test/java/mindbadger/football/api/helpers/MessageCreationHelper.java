@@ -43,6 +43,17 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withFixtureWithNoDate (String seasonNumber, String divisionId, String homeTeamId,
+                                          String awayTeamId) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "fixtures");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();

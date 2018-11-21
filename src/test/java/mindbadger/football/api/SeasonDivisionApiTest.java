@@ -7,6 +7,8 @@ import org.junit.Test;
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.*;
 import static mindbadger.football.api.helpers.OperationHelper.*;
+import static mindbadger.football.api.helpers.TestPreConditionHelper.givenADivisionWithName;
+import static mindbadger.football.api.helpers.TestPreConditionHelper.givenASeasonDivisionWith;
 import static org.hamcrest.Matchers.*;
 
 /**
@@ -32,10 +34,7 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	public void shouldAddNewDivisionToSeason() {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivisionId);
 
 		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
@@ -59,25 +58,12 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	public void shouldAddMultipleNewDivisionsToSeason() {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-		String newDivision1Id = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivision1Id = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivision1Id);
 
-		final String SEASON_DIVISION_1_ID = SEASON_NUMBER + "-" + newDivision1Id;
+		givenASeasonDivisionWith(SEASON_NUMBER, newDivision1Id, "1");
 
-		whenCreate(SEASON_TO_SEASON_DIVISION_URL,
-				withSeasonDivision(SEASON_NUMBER, newDivision1Id, "1")).
-				then().
-				statusCode(HttpStatus.SC_CREATED).
-				assertThat().
-				body("data.id", equalTo(SEASON_DIVISION_1_ID));
-
-		String newDivision2Id = whenCreate(DIVISION_URL, withDivision(DIVISION2_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivision2Id = givenADivisionWithName(DIVISION2_NAME);
 		newDivisionIds.add(newDivision2Id);
 
 		final String SEASON_DIVISION_2_ID = SEASON_NUMBER + "-" + newDivision2Id;
@@ -108,10 +94,7 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	public void shouldAddNewCanonicalSeasonDivision() {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivisionId);
 
 		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
@@ -134,16 +117,12 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	public void shouldDeleteASeasonDivision() {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivisionId);
 
 		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
 
-		whenCreate(SEASON_DIVISION_URL,
-				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1"));
+		givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
 		whenDelete(SEASON_DIVISION_URL, SEASON_DIVISION_ID).
 			then().
@@ -158,18 +137,10 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	public void shouldThrowAnErrorWhenAttemptToCreateADuplicateSeasonDivision () {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivisionId);
 
-		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
-
-		whenCreate(SEASON_DIVISION_URL,
-				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
-				then().
-				statusCode(HttpStatus.SC_CREATED);
+		givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
 		whenCreate(SEASON_DIVISION_URL,
 				withSeasonDivision(SEASON_NUMBER, newDivisionId, "1")).
@@ -189,10 +160,7 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 
 	@Test
 	public void shouldThrowAnErrorWhenAttemptToCreateASeasonDivisionWithANonExistentSeason () {
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivisionId);
 
 		whenCreate(SEASON_DIVISION_URL,
@@ -205,10 +173,7 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 	public void shouldHaveAHyperlinksToSeasonDivisionTeamsAndFixtureDates () {
 		whenCreate(SEASON_URL, withSeason(SEASON_NUMBER));
 
-		String newDivisionId = whenCreate(DIVISION_URL, withDivision(DIVISION1_NAME)).
-				then().
-				contentType(ContentType.JSON).extract().path("data.id");
-
+		String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
 		newDivisionIds.add(newDivisionId);
 
 		final String SEASON_DIVISION_ID = SEASON_NUMBER + "-" + newDivisionId;
@@ -239,8 +204,6 @@ public class SeasonDivisionApiTest extends AbstractRestAssuredTest {
 				body("data.relationships.division.links.related", equalTo(divisionHyperlink)).
 				body("data.relationships.season.links.related", equalTo(seasonHyperlink)).
 				body("data.relationships.teams.links.related", equalTo(teamsHyperlink)).
-				body("data.relationships.fixtureDates.links.related", equalTo(fixtureDatesHyperlink))
-		;
-
+				body("data.relationships.fixtureDates.links.related", equalTo(fixtureDatesHyperlink));
 	}
 }
