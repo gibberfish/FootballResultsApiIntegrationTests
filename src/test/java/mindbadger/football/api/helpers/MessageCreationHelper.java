@@ -54,6 +54,32 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withFixtureWithDate (String seasonNumber, String divisionId, String homeTeamId,
+                                                    String awayTeamId, String fixtureDate) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "fixtures");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
+        return message;
+    }
+
+    public static JsonObject withPlayedFixture (String seasonNumber, String divisionId, String homeTeamId,
+                             String awayTeamId, String fixtureDate, String homeGoals, String awayGoals) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "fixtures");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeGoals", homeGoals);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayGoals", awayGoals);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();
