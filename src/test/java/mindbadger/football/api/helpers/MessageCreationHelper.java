@@ -1,6 +1,8 @@
 package mindbadger.football.api.helpers;
 
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import net.minidev.json.JSONObject;
 
 public class MessageCreationHelper {
     public static JsonObject withSeason (String seasonNumber) {
@@ -43,19 +45,22 @@ public class MessageCreationHelper {
         return message;
     }
 
-    public static JsonObject withFixtureWithNoDate (String seasonNumber, String divisionId, String homeTeamId,
-                                          String awayTeamId) {
+    public static JsonObject withFixture(String seasonNumber, String divisionId, String homeTeamId,
+                                         String awayTeamId, String fixtureId) {
         JsonObject message = MessageCreationHelper.createBaseMessage();
         message.getAsJsonObject("data").addProperty("type", "fixtures");
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
+        if (fixtureId != null) {
+            message.getAsJsonObject("data").addProperty("id", fixtureId);
+        }
         return message;
     }
 
-    public static JsonObject withFixtureWithDate (String seasonNumber, String divisionId, String homeTeamId,
-                                                    String awayTeamId, String fixtureDate) {
+    public static JsonObject withFixture(String seasonNumber, String divisionId, String homeTeamId,
+                                         String awayTeamId, String fixtureDate, String fixtureId) {
         JsonObject message = MessageCreationHelper.createBaseMessage();
         message.getAsJsonObject("data").addProperty("type", "fixtures");
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
@@ -63,11 +68,15 @@ public class MessageCreationHelper {
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
+        if (fixtureId != null) {
+            message.getAsJsonObject("data").addProperty("id", fixtureId);
+        }
         return message;
     }
 
-    public static JsonObject withPlayedFixture (String seasonNumber, String divisionId, String homeTeamId,
-                             String awayTeamId, String fixtureDate, String homeGoals, String awayGoals) {
+    public static JsonObject withFixture(String seasonNumber, String divisionId, String homeTeamId,
+                                         String awayTeamId, String fixtureDate, String homeGoals, String awayGoals,
+                                         String fixtureId) {
         JsonObject message = MessageCreationHelper.createBaseMessage();
         message.getAsJsonObject("data").addProperty("type", "fixtures");
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
@@ -76,7 +85,10 @@ public class MessageCreationHelper {
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeGoals", homeGoals);
-        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayGoals", awayGoals);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayGoals",awayGoals);
+        if (fixtureId != null) {
+            message.getAsJsonObject("data").addProperty("id", fixtureId);
+        }
         return message;
     }
 

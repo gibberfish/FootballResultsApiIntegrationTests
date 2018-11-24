@@ -14,6 +14,7 @@ public class OperationHelper {
         return
                 given().
                         header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+                        log().all().
                         when().
                         delete(url + id);
     }
@@ -22,6 +23,7 @@ public class OperationHelper {
         return
                 given().
                         header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+                        log().all().
                         when().
                         get(url + id);
     }
@@ -30,6 +32,7 @@ public class OperationHelper {
         return
                 given().
                         header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+//                        log().all().
                         when().
                         get(url);
     }
@@ -37,10 +40,25 @@ public class OperationHelper {
     public static Response whenCreate(String url, JsonObject message) {
         return
                 with().
-                        body(message).
+                        body(message.toString()).
                         given().
                         header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+//                        log().all().
                         when().
                         post(url);
+    }
+
+    public static Response whenUpdate(String url, String id, JsonObject message) {
+
+        System.out.println (message);
+
+        return
+                with().
+                        body(message.toString()).
+                        given().
+                        header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+//                        log().all().
+                        when().
+                        patch(url + id);
     }
 }
