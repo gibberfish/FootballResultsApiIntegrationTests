@@ -2,6 +2,7 @@ package mindbadger.football.api;
 
 public class ApiTestConstants {
     public static final String SEASON_NUMBER = "1750";
+    public static final String SEASON_NUMBER_2 = "1751";
     public static final String DIVISION1_NAME = "Madeup Division 1";
     public static final String DIVISION2_NAME = "Madeup Division 2";
     public static final String TEAM1_NAME = "Madeup Team 1";
@@ -13,6 +14,7 @@ public class ApiTestConstants {
     public static final String NON_EXISTENT_SEASON_NUM = "1700";
     public static final String NON_EXISTENT_DIVISION_ID = "NoSuchID";
     public static final String NON_EXISTENT_TEAM_ID = "NoSuchID";
+    public static final String NON_EXISTENT_FIXTURE_ID = "NoSuchID";
 
     public static final String SEASON_URL = "seasons/";
     public static final String DIVISION_URL = "divisions/";

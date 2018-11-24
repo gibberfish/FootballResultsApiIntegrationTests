@@ -286,38 +286,300 @@ public class FixtureApiTest extends AbstractRestAssuredTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenAttemptToUpdateSeasonNumber() {
-        fail("Not implemented this test yet.");
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithANonExistentSeason() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(NON_EXISTENT_SEASON_NUM, newDivisionId, newHomeTeamId,
+                newAwayTeamId, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenAttemptToUpdateDivisionId() {
-        fail("Not implemented this test yet.");
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithADifferentSeason() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        givenASeason(SEASON_NUMBER_2);
+
+        givenASeasonDivisionWith(SEASON_NUMBER_2, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER_2, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER_2, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER_2, newDivisionId, newHomeTeamId,
+                newAwayTeamId, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenAttemptToUpdateHomeTeamId() {
-        fail("Not implemented this test yet.");
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithANonExistentDivision() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER, NON_EXISTENT_DIVISION_ID, newHomeTeamId,
+                newAwayTeamId, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenAttemptToUpdateAwayTeamId() {
-        fail("Not implemented this test yet.");
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithADifferentDivision() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newDivisionId2 = givenADivisionWithName(DIVISION2_NAME);
+        newDivisionIds.add(newDivisionId2);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId2, "2");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId2, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId2, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER_2, newDivisionId, newHomeTeamId,
+                newAwayTeamId, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenAttemptToRemoveDateButNotScore() {
-        fail("Not implemented this test yet.");
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithANonExistentHomeTeam() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER, newDivisionId, NON_EXISTENT_TEAM_ID,
+                newAwayTeamId, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithADifferentHomeTeam() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newTeamId2 = givenATeamWithName(TEAM3_NAME);
+        newTeamIds.add(newTeamId2);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId2);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER, newDivisionId, newTeamId2,
+                newAwayTeamId, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithANonExistentAwayTeam() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER, newDivisionId, newHomeTeamId,
+                NON_EXISTENT_TEAM_ID, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenAttemptToUpdateWithADifferentAwayTeam() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newTeamId2 = givenATeamWithName(TEAM3_NAME);
+        newTeamIds.add(newTeamId2);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId2);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId);
+        newFixtureIds.add(newFixtureId);
+
+        whenUpdate(FIXTURE_URL, newFixtureId, withFixture(SEASON_NUMBER, newDivisionId, newHomeTeamId,
+                newTeamId2, newFixtureId)).
+                then().
+                statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
     public void shouldDeleteFixture() {
-        fail("Not implemented this test yet.");
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId,
+                FIXTURE_DATE_1, "3", "0");
+        newFixtureIds.add(newFixtureId);
+
+        whenDelete(FIXTURE_URL, newFixtureId).
+                then().
+                statusCode(HttpStatus.SC_NO_CONTENT);
+
+        whenGet(FIXTURE_URL, newFixtureId).
+                then().
+                statusCode(HttpStatus.SC_NOT_FOUND);
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenGetFixtureWithNonExistentId() {
+        whenGet(FIXTURE_URL, NON_EXISTENT_FIXTURE_ID).
+                then().
+                statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test
     public void shouldThrowExceptionWhenGetAllFixtures() {
-        fail("Not implemented this test yet.");
+        whenGet(FIXTURE_URL).
+                then().
+                statusCode(HttpStatus.SC_NOT_IMPLEMENTED);
     }
 
     @Test
@@ -325,8 +587,4 @@ public class FixtureApiTest extends AbstractRestAssuredTest {
         fail("Not implemented this test yet.");
     }
 
-//    @Test
-//    public  void removeme () {
-//        whenUpdate(FIXTURE_URL, "412024", withFixture("1799", "2", "59", "60", "1799-10-10", null, null, "412024"));
-//    }
 }

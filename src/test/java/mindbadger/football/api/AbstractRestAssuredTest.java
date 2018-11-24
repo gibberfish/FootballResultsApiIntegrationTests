@@ -42,6 +42,7 @@ public class AbstractRestAssuredTest {
             whenDelete(FIXTURE_URL, fixtureId);
         }
         whenDelete(SEASON_URL, SEASON_NUMBER);
+        whenDelete(SEASON_URL, SEASON_NUMBER_2);
         for (String divisionId : newDivisionIds) {
             whenDelete(DIVISION_URL, divisionId);
         }

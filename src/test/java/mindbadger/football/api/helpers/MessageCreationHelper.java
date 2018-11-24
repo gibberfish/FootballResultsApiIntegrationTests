@@ -1,8 +1,6 @@
 package mindbadger.football.api.helpers;
 
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import net.minidev.json.JSONObject;
 
 public class MessageCreationHelper {
     public static JsonObject withSeason (String seasonNumber) {
