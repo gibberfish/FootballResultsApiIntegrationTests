@@ -584,7 +584,43 @@ public class FixtureApiTest extends AbstractRestAssuredTest {
 
     @Test
     public void shouldHaveAHyperlinksToSeasonDivisionsAndTeams() {
-        fail("Not implemented this test yet.");
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String newFixtureId = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newHomeTeamId, newAwayTeamId,
+                FIXTURE_DATE_1, "3", "0");
+        newFixtureIds.add(newFixtureId);
+
+
+        String seasonDivisionHyperlink = host + ":" + port + basePath +
+                FIXTURE_URL + newFixtureId + "/seasonDivision";
+
+        String homeTeamHyperlink = host + ":" + port + basePath +
+                FIXTURE_URL + newFixtureId + "/homeTeam";
+
+        String awayTeamHyperlink = host + ":" + port + basePath +
+                FIXTURE_URL + newFixtureId + "/awayTeam";
+
+        whenGet(FIXTURE_URL + newFixtureId).
+                then().
+                assertThat().
+                body("data.relationships.seasonDivision.links.related", equalTo(seasonDivisionHyperlink)).
+                body("data.relationships.homeTeam.links.related", equalTo(homeTeamHyperlink)).
+                body("data.relationships.awayTeam.links.related", equalTo(awayTeamHyperlink));
     }
 
 }

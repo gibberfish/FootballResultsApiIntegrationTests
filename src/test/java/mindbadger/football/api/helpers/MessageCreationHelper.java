@@ -99,4 +99,11 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withFixtureDate(String seasonNumber, String divisionId, String fixtureDate) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "fixtureDates");
+        message.getAsJsonObject("data").addProperty("id", seasonNumber + "-" + divisionId + "_" + fixtureDate);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
+        return message;
+    }
 }
