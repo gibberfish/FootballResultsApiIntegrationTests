@@ -2,6 +2,10 @@ package mindbadger.football.api.helpers;
 
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
+import static mindbadger.football.api.ApiTestConstants.ID_SEPARATOR;
+
 public class MessageCreationHelper {
     public static JsonObject withSeason (String seasonNumber) {
         JsonObject message = MessageCreationHelper.createBaseMessage();
@@ -90,6 +94,23 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withTeamStatistics(String seasonNumber, String divisionId, String teamId,
+                                                String fixtureDate, Map<String,String> statistics) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "fixtures");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
+//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
+//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
+//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
+//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeGoals", homeGoals);
+//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayGoals",awayGoals);
+//        if (fixtureId != null) {
+//            message.getAsJsonObject("data").addProperty("id", fixtureId);
+//        }
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();
@@ -102,8 +123,15 @@ public class MessageCreationHelper {
     public static JsonObject withFixtureDate(String seasonNumber, String divisionId, String fixtureDate) {
         JsonObject message = MessageCreationHelper.createBaseMessage();
         message.getAsJsonObject("data").addProperty("type", "fixtureDates");
-        message.getAsJsonObject("data").addProperty("id", seasonNumber + "-" + divisionId + "_" + fixtureDate);
+        message.getAsJsonObject("data").addProperty("id",
+                seasonNumber + ID_SEPARATOR + divisionId + ID_SEPARATOR + ID_SEPARATOR + fixtureDate);
         message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
         return message;
+    }
+
+
+    public static String withSeasonDivisionId (String seasonNumber, String divisionId) {
+        //TODO Implement this & other ID forming helper methods
+        return  null;
     }
 }

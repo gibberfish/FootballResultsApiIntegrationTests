@@ -2,6 +2,8 @@ package mindbadger.football.api.helpers;
 
 import com.jayway.restassured.http.ContentType;
 
+import java.util.Map;
+
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.*;
 import static mindbadger.football.api.helpers.OperationHelper.whenCreate;
@@ -33,7 +35,7 @@ public class TestPreConditionHelper {
 
     public static String givenAFixtureWith (String seasonNumber, String divisionId, String homeTeamId,
                                             String awayTeamId) {
-        return whenCreate(FIXTURE_URL, MessageCreationHelper.withFixture(seasonNumber, divisionId,
+        return whenCreate(FIXTURE_URL, withFixture(seasonNumber, divisionId,
                 homeTeamId, awayTeamId,null)).
                 then().
                 contentType(ContentType.JSON).extract().path("data.id");
@@ -41,7 +43,7 @@ public class TestPreConditionHelper {
 
     public static String givenAFixtureWith (String seasonNumber, String divisionId, String homeTeamId,
                                             String awayTeamId, String fixtureDate) {
-        return whenCreate(FIXTURE_URL, MessageCreationHelper.withFixture(seasonNumber, divisionId,
+        return whenCreate(FIXTURE_URL, withFixture(seasonNumber, divisionId,
                 homeTeamId, awayTeamId, fixtureDate, null)).
                 then().
                 contentType(ContentType.JSON).extract().path("data.id");
@@ -49,8 +51,16 @@ public class TestPreConditionHelper {
 
     public static String givenAFixtureWith (String seasonNumber, String divisionId, String homeTeamId,
                                           String awayTeamId, String fixtureDate, String homeGoals, String awayGoals) {
-        return whenCreate(FIXTURE_URL, MessageCreationHelper.withFixture(seasonNumber, divisionId,
+        return whenCreate(FIXTURE_URL, withFixture(seasonNumber, divisionId,
                 homeTeamId, awayTeamId, fixtureDate, homeGoals, awayGoals, null)).
+                then().
+                contentType(ContentType.JSON).extract().path("data.id");
+    }
+
+    public static String givenATeamStatisticsWith (String seasonNumber, String divisionId, String teamId,
+                                            String fixtureDate, Map<String,String> statistics) {
+        return whenCreate(TEAM_STATISTICS_URL, withTeamStatistics(seasonNumber, divisionId,
+                teamId, fixtureDate, statistics)).
                 then().
                 contentType(ContentType.JSON).extract().path("data.id");
     }

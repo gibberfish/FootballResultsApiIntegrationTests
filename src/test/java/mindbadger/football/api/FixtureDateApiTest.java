@@ -21,7 +21,8 @@ public class FixtureDateApiTest extends AbstractRestAssuredTest {
 
     @Test
     public void shouldThrowAnErrorWhenAttemptToGetANonExistentFixtureDate() {
-        final String fixtureDateId = SEASON_NUMBER + "-" + NON_EXISTENT_DIVISION_ID + "_" + FIXTURE_DATE_1;
+        final String fixtureDateId =
+                SEASON_NUMBER + ID_SEPARATOR + NON_EXISTENT_DIVISION_ID + ID_SEPARATOR + ID_SEPARATOR + FIXTURE_DATE_1;
 
         whenGet(FIXTURE_DATE_URL + fixtureDateId).
                 then().
@@ -51,7 +52,8 @@ public class FixtureDateApiTest extends AbstractRestAssuredTest {
                 FIXTURE_DATE_1, "3", "0");
         newFixtureIds.add(newFixtureId);
 
-        final String fixtureDateId = SEASON_NUMBER + "-" + newDivisionId + "_" + FIXTURE_DATE_1;
+        final String fixtureDateId =
+                SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + ID_SEPARATOR + FIXTURE_DATE_1;
 
         whenCreate(FIXTURE_DATE_URL, withFixtureDate(SEASON_NUMBER, newDivisionId, FIXTURE_DATE_1)).
                 then().
@@ -81,7 +83,8 @@ public class FixtureDateApiTest extends AbstractRestAssuredTest {
                 FIXTURE_DATE_1, "3", "0");
         newFixtureIds.add(newFixtureId);
 
-        final String fixtureDateId = SEASON_NUMBER + "-" + newDivisionId + "_" + FIXTURE_DATE_1;
+        final String fixtureDateId =
+                SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + ID_SEPARATOR + FIXTURE_DATE_1;
 
         whenGet(FIXTURE_DATE_URL + fixtureDateId).
                 then().
@@ -114,8 +117,9 @@ public class FixtureDateApiTest extends AbstractRestAssuredTest {
                 FIXTURE_DATE_1, "3", "0");
         newFixtureIds.add(newFixtureId);
 
-        final String seasonDivisionId = SEASON_NUMBER + "-" + newDivisionId;
-        final String fixtureDateId = SEASON_NUMBER + "-" + newDivisionId + "_" + FIXTURE_DATE_1;
+        final String seasonDivisionId = SEASON_NUMBER + ID_SEPARATOR + newDivisionId;
+        final String fixtureDateId =
+                SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + ID_SEPARATOR + FIXTURE_DATE_1;
 
         whenGet(SEASON_DIVISION_URL + seasonDivisionId + "/fixtureDates").
                 then().
@@ -152,7 +156,7 @@ public class FixtureDateApiTest extends AbstractRestAssuredTest {
                 FIXTURE_DATE_2, "1", "1");
         newFixtureIds.add(newFixtureId2);
 
-        final String seasonDivisionId = SEASON_NUMBER + "-" + newDivisionId;
+        final String seasonDivisionId = SEASON_NUMBER + ID_SEPARATOR + newDivisionId;
 
         whenGet(SEASON_DIVISION_URL + seasonDivisionId + "/fixtureDates").
                 then().
@@ -184,7 +188,8 @@ public class FixtureDateApiTest extends AbstractRestAssuredTest {
                 FIXTURE_DATE_1, "3", "0");
         newFixtureIds.add(newFixtureId);
 
-        final String fixtureDateId = SEASON_NUMBER + "-" + newDivisionId + "_" + FIXTURE_DATE_1;
+        final String fixtureDateId =
+                SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + ID_SEPARATOR + FIXTURE_DATE_1;
 
         final String teamStatisticsHyperlink = host + ":" + port + basePath +
                 FIXTURE_DATE_URL + fixtureDateId + "/teamStatistics";

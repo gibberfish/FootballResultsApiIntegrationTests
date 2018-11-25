@@ -28,7 +28,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
         givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_URL + SEASON_NUMBER +
-                "-" + newDivisionId + "/teams";
+                ID_SEPARATOR + newDivisionId + "/teams";
 
         whenGet(SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL).
                 then().
@@ -47,7 +47,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
         String newTeamId = givenATeamWithName(TEAM1_NAME);
         newTeamIds.add(newTeamId);
 
-        final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId;
+        final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeamId;
 
         givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
@@ -58,7 +58,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
                 body("data.id", equalTo(SEASON_DIVISION_TEAM_ID));
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_URL + SEASON_NUMBER +
-                "-" + newDivisionId + "/teams";
+                ID_SEPARATOR + newDivisionId + "/teams";
 
         whenGet(SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL).
                 then().
@@ -81,8 +81,8 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
         String newTeam2Id = givenATeamWithName(TEAM2_NAME);
         newTeamIds.add(newTeam2Id);
 
-        final String SEASON_DIVISION_TEAM1_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeam1Id;
-        final String SEASON_DIVISION_TEAM2_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeam2Id;
+        final String SEASON_DIVISION_TEAM1_ID = SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeam1Id;
+        final String SEASON_DIVISION_TEAM2_ID = SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeam2Id;
 
         givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
@@ -99,7 +99,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
                 body("data.id", equalTo(SEASON_DIVISION_TEAM2_ID));
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_URL + SEASON_NUMBER +
-                "-" + newDivisionId + "/teams";
+                ID_SEPARATOR + newDivisionId + "/teams";
 
         whenGet(SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL).
                 then().
@@ -121,7 +121,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
         givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_TEAM_URL + SEASON_NUMBER +
-                "-" + newDivisionId + "-NONEXISTENTTEAM";
+                ID_SEPARATOR + newDivisionId + ID_SEPARATOR + "NONEXISTENTTEAM";
 
         whenGet(SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL).
                 then().
@@ -132,7 +132,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
     public void shouldReturnNotFoundWhenGettingNonExistentSeasonDivisionTeamWhereSeasonDivisionDoesntExist() {
 
         final String SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL = SEASON_DIVISION_TEAM_URL + SEASON_NUMBER +
-                "-NONEXISTENTDIVISION-NONEXISTENTTEAM";
+                ID_SEPARATOR + "NONEXISTENTDIVISION" + ID_SEPARATOR + "NONEXISTENTTEAM";
 
         whenGet(SEASON_DIVISION_TO_SEASON_DIVISION_TEAM_URL).
                 then().
@@ -149,7 +149,7 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
         String newTeamId = givenATeamWithName(TEAM1_NAME);
         newTeamIds.add(newTeamId);
 
-        final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId;
+        final String SEASON_DIVISION_TEAM_ID = SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeamId;
 
         givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
 
@@ -235,12 +235,12 @@ public class SeasonDivisionTeamApiTest extends AbstractRestAssuredTest {
         givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId);
 
         String seasonDivisionHyperlink = host + ":" + port + basePath +
-                SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId + "/seasonDivision";
+                SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeamId + "/seasonDivision";
 
         String teamHyperlink = host + ":" + port + basePath +
-                SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId + "/team";
+                SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeamId + "/team";
 
-        whenGet(SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + "-" + newDivisionId + "-" + newTeamId).
+        whenGet(SEASON_DIVISION_TEAM_URL + SEASON_NUMBER + ID_SEPARATOR + newDivisionId + ID_SEPARATOR + newTeamId).
                 then().
                 assertThat().
                 body("data.relationships.seasonDivision.links.related", equalTo(seasonDivisionHyperlink)).

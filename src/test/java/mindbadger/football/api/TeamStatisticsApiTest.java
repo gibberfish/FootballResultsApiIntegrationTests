@@ -13,12 +13,43 @@ import static org.junit.Assert.fail;
 public class TeamStatisticsApiTest extends AbstractRestAssuredTest {
 
     @Test
-    public void shouldCreateTeamStatistic() {
+    public void shouldGetEmptyTeamStatisticsForAFixtureDate () {
+        //This should work even if there are no team statistics
         fail("Not implemented this test yet.");
     }
 
     @Test
-    public void shouldCreateMultipleTeamStatistics() {
+    public void shouldReturn501WhenCreateTeamStatisticsForAFixtureDate() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldReturn422WhenCreateTeamStatisticsAtCanonicalUrlWithoutId() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldCreateTeamStatisticsAtCanonicalUrl() {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldGetTeamStatisticsAtCanonicalUrl () {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldDeleteTeamStatisticsAtCanonicalUrl () {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldGetExistingTeamStatisticsForAFixtureDate () {
+        fail("Not implemented this test yet.");
+    }
+
+    @Test
+    public void shouldReturn404WhenCanonicalTeamStatisticsNotFound() {
         fail("Not implemented this test yet.");
     }
 
