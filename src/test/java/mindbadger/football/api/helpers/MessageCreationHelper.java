@@ -1,7 +1,9 @@
 package mindbadger.football.api.helpers;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 
+import java.util.List;
 import java.util.Map;
 
 import static mindbadger.football.api.ApiTestConstants.ID_SEPARATOR;
@@ -94,20 +96,37 @@ public class MessageCreationHelper {
         return message;
     }
 
-    public static JsonObject withTeamStatistics(String seasonNumber, String divisionId, String teamId,
-                                                String fixtureDate, Map<String,String> statistics) {
+    public static JsonObject withFixtureDate(String seasonNumber, String divisionId, String fixtureDate) {
         JsonObject message = MessageCreationHelper.createBaseMessage();
-        message.getAsJsonObject("data").addProperty("type", "fixtures");
-        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("seasonNumber", seasonNumber);
-        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("divisionId", divisionId);
-//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeTeamId", homeTeamId);
-//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayTeamId", awayTeamId);
-//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
-//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("homeGoals", homeGoals);
-//        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("awayGoals",awayGoals);
-//        if (fixtureId != null) {
-//            message.getAsJsonObject("data").addProperty("id", fixtureId);
-//        }
+        message.getAsJsonObject("data").addProperty("type", "fixtureDates");
+        message.getAsJsonObject("data").addProperty("id",
+                seasonNumber + ID_SEPARATOR + divisionId + ID_SEPARATOR + ID_SEPARATOR + fixtureDate);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
+        return message;
+    }
+
+    public static JsonObject withTeamStatistics(String seasonNumber, String divisionId, String teamId,
+                                                String fixtureDate, List<Map<String,Integer>> statistics) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+
+        String id = seasonNumber + ID_SEPARATOR + divisionId + ID_SEPARATOR + teamId + ID_SEPARATOR + fixtureDate;
+
+        message.getAsJsonObject("data").addProperty("type", "teamStatistics");
+        message.getAsJsonObject("data").addProperty("id", id);
+
+        JsonArray statisticsArray  = new JsonArray();
+
+        statistics.forEach((statistic) -> {
+            JsonObject statisticsObject = new JsonObject();
+            statistic.forEach((k,v)-> {
+                statisticsObject.addProperty("statistic",k);
+                statisticsObject.addProperty("value",v);
+            });
+            statisticsArray.add(statisticsObject);
+        });
+
+        message.getAsJsonObject("data").getAsJsonObject("attributes").add("statistics", statisticsArray);
+
         return message;
     }
 
@@ -118,20 +137,5 @@ public class MessageCreationHelper {
         message.add("data", data);
         data.add("attributes", attributes);
         return message;
-    }
-
-    public static JsonObject withFixtureDate(String seasonNumber, String divisionId, String fixtureDate) {
-        JsonObject message = MessageCreationHelper.createBaseMessage();
-        message.getAsJsonObject("data").addProperty("type", "fixtureDates");
-        message.getAsJsonObject("data").addProperty("id",
-                seasonNumber + ID_SEPARATOR + divisionId + ID_SEPARATOR + ID_SEPARATOR + fixtureDate);
-        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fixtureDate", fixtureDate);
-        return message;
-    }
-
-
-    public static String withSeasonDivisionId (String seasonNumber, String divisionId) {
-        //TODO Implement this & other ID forming helper methods
-        return  null;
     }
 }

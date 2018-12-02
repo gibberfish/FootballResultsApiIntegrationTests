@@ -2,11 +2,12 @@ package mindbadger.football.api.helpers;
 
 import com.jayway.restassured.http.ContentType;
 
+import java.util.List;
 import java.util.Map;
 
 import static mindbadger.football.api.ApiTestConstants.*;
 import static mindbadger.football.api.helpers.MessageCreationHelper.*;
-import static mindbadger.football.api.helpers.OperationHelper.whenCreate;
+import static mindbadger.football.api.helpers.OperationHelper.*;
 
 public class TestPreConditionHelper {
     public static void givenASeason (String seasonNumber) {
@@ -58,11 +59,12 @@ public class TestPreConditionHelper {
     }
 
     public static String givenATeamStatisticsWith (String seasonNumber, String divisionId, String teamId,
-                                            String fixtureDate, Map<String,String> statistics) {
-        return whenCreate(TEAM_STATISTICS_URL, withTeamStatistics(seasonNumber, divisionId,
+                                            String fixtureDate, List<Map<String, Integer>> statistics) {
+        String id = seasonNumber + "_" + divisionId + "_" + teamId + "_" + fixtureDate;
+
+        return whenUpdate(TEAM_STATISTICS_URL, id, withTeamStatistics(seasonNumber, divisionId,
                 teamId, fixtureDate, statistics)).
                 then().
                 contentType(ContentType.JSON).extract().path("data.id");
     }
-
 }
