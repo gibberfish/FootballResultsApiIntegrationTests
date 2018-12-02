@@ -1,15 +1,14 @@
 package mindbadger.football.api;
 
-import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import static mindbadger.football.api.ApiTestConstants.*;
-import static mindbadger.football.api.helpers.MessageCreationHelper.*;
+import static mindbadger.football.api.helpers.MessageCreationHelper.withSeason;
+import static mindbadger.football.api.helpers.MessageCreationHelper.withSeasonDivisionTeam;
 import static mindbadger.football.api.helpers.OperationHelper.*;
 import static mindbadger.football.api.helpers.TestPreConditionHelper.*;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.fail;
 
 /**
  * These tests are dependent upon a running API - the details of which are configured in the application.properties
