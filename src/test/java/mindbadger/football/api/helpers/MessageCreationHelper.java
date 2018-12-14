@@ -130,6 +130,15 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withDivisionMapping (String dialect, String sourceId, String fraId) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "division_mapping");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("dialect", dialect);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("sourceId", sourceId);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("fraId", fraId);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();

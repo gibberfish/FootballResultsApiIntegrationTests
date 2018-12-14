@@ -67,4 +67,11 @@ public class TestPreConditionHelper {
                 then().
                 contentType(ContentType.JSON).extract().path("data.id");
     }
+
+    public static String givenADivisionMappingWith (String dialect, String sourceId, String fraId) {
+        return whenCreate(DIVISION_MAPPING_URL, withDivisionMapping(dialect, sourceId, fraId)).
+                then().
+                contentType(ContentType.JSON).extract().path("data.id");
+    }
+
 }
