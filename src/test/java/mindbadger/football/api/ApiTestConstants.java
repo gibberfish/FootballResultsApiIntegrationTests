@@ -13,7 +13,7 @@ public class ApiTestConstants {
     public static final String TEAM4_NAME = "Madeup Team 4";
     public static final String FIXTURE_DATE_1 = "1750-10-08";
     public static final String FIXTURE_DATE_2 = "1750-10-12";
-    public static final String DIALECT = "footibase";
+    public static final String DIALECT = "footiebase";
     public static final String SOURCE_ID = "10";
     public static final String FRA_ID = "11";
 
@@ -23,6 +23,7 @@ public class ApiTestConstants {
     public static final String NON_EXISTENT_FIXTURE_ID = "NoSuchID";
     public static final String NON_EXISTENT_DIVISION_MAPPING_ID = "footiebase_10_20";
     public static final String NON_EXISTENT_TEAM_MAPPING_ID = "footiebase_30_40";
+    public static final String NON_EXISTENT_TRACKED_DIVISION_ID = "footiebase_50";
 
     public static final String SEASON_URL = "seasons/";
     public static final String DIVISION_URL = "divisions/";
@@ -34,6 +35,7 @@ public class ApiTestConstants {
     public static final String TEAM_STATISTICS_URL = "teamStatistics/";
     public static final String DIVISION_MAPPING_URL = "division_mapping/";
     public static final String TEAM_MAPPING_URL = "team_mapping/";
+    public static final String TRACKED_DIVISION_URL = "tracked_division/";
 
     public static final String SEASON_TO_SEASON_DIVISION_URL = SEASON_URL + SEASON_NUMBER + "/seasonDivisions";
     public static final String SEASON_TO_NON_EXISTENT_SEASON_DIVISION_URL = SEASON_URL + "1700/seasonDivisions";

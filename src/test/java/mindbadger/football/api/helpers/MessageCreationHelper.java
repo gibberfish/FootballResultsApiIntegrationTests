@@ -148,6 +148,14 @@ public class MessageCreationHelper {
         return message;
     }
 
+    public static JsonObject withTrackedDivision (String dialect, String sourceId) {
+        JsonObject message = MessageCreationHelper.createBaseMessage();
+        message.getAsJsonObject("data").addProperty("type", "tracked_division");
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("dialect", dialect);
+        message.getAsJsonObject("data").getAsJsonObject("attributes").addProperty("sourceId", sourceId);
+        return message;
+    }
+
     public static JsonObject createBaseMessage () {
         JsonObject message = new JsonObject();
         JsonObject data = new JsonObject();

@@ -79,4 +79,10 @@ public class TestPreConditionHelper {
                 then().
                 contentType(ContentType.JSON).extract().path("data.id");
     }
+
+    public static String givenATrackedDivisionWith (String dialect, String sourceId) {
+        return whenCreate(TRACKED_DIVISION_URL, withTrackedDivision(dialect, sourceId)).
+                then().
+                contentType(ContentType.JSON).extract().path("data.id");
+    }
 }
