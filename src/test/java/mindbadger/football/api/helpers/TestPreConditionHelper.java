@@ -74,4 +74,9 @@ public class TestPreConditionHelper {
                 contentType(ContentType.JSON).extract().path("data.id");
     }
 
+    public static String givenATeamMappingWith (String dialect, String sourceId, String fraId) {
+        return whenCreate(TEAM_MAPPING_URL, withTeamMapping(dialect, sourceId, fraId)).
+                then().
+                contentType(ContentType.JSON).extract().path("data.id");
+    }
 }
