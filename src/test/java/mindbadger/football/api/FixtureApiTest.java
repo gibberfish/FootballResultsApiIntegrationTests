@@ -575,10 +575,37 @@ public class FixtureApiTest extends AbstractRestAssuredTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenGetAllFixtures() {
+    public void shouldGetAllFixtures() {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newHomeTeamId = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newHomeTeamId);
+
+        String newAwayTeamId = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newAwayTeamId);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newHomeTeamId);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newAwayTeamId);
+
+        String fixtureId = whenCreate(FIXTURE_URL, MessageCreationHelper.withFixture(SEASON_NUMBER, newDivisionId,
+                newHomeTeamId, newAwayTeamId, FIXTURE_DATE_1, null)).
+                then().
+                statusCode(HttpStatus.SC_CREATED).
+                assertThat().
+                body("data.id", notNullValue()).
+                contentType(ContentType.JSON).extract().path("data.id");
+        newFixtureIds.add(fixtureId);
+
+        //TODO Add a filter to the query and then count that the correct number of records are returned
         whenGet(FIXTURE_URL).
                 then().
-                statusCode(HttpStatus.SC_NOT_IMPLEMENTED);
+                statusCode(HttpStatus.SC_OK);
     }
 
     @Test
