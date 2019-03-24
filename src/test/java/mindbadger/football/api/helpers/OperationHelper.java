@@ -45,9 +45,6 @@ public class OperationHelper {
     }
 
     public static Response whenUpdate(String url, String id, JsonObject message) {
-
-        System.out.println (message);
-
         return
                 with().
                         body(message.toString()).
@@ -55,5 +52,15 @@ public class OperationHelper {
                         header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
                         when().
                         patch(url + id);
+    }
+
+    public static Response whenBulkUpdate(String url, JsonObject message) {
+        return
+                with().
+                        body(message.toString()).
+                        given().
+                        header(CONTENT_TYPE_HEADER, CRNK_CONTENT_TYPE).
+                        when().
+                        put(url);
     }
 }

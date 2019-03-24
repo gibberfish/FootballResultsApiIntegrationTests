@@ -40,4 +40,6 @@ public class ApiTestConstants {
     public static final String SEASON_TO_SEASON_DIVISION_URL = SEASON_URL + SEASON_NUMBER + "/seasonDivisions";
     public static final String SEASON_TO_NON_EXISTENT_SEASON_DIVISION_URL = SEASON_URL + "1700/seasonDivisions";
 
+    public static final String BULKSAVE_FIXTURES_URL = "bulksave/fixtures/";
+
 }

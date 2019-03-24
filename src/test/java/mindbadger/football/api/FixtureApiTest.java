@@ -1,5 +1,7 @@
 package mindbadger.football.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jayway.restassured.http.ContentType;
 import mindbadger.football.api.helpers.MessageCreationHelper;
 import org.apache.http.HttpStatus;
@@ -649,4 +651,68 @@ public class FixtureApiTest extends AbstractRestAssuredTest {
                 body("data.relationships.awayTeam.links.related", equalTo(awayTeamHyperlink));
     }
 
+    @Test
+    public void shouldPerformABulkUpdate () {
+        givenASeason(SEASON_NUMBER);
+
+        String newDivisionId = givenADivisionWithName(DIVISION1_NAME);
+        newDivisionIds.add(newDivisionId);
+
+        String newTeamId1 = givenATeamWithName(TEAM1_NAME);
+        newTeamIds.add(newTeamId1);
+
+        String newTeamId2 = givenATeamWithName(TEAM2_NAME);
+        newTeamIds.add(newTeamId2);
+
+        String newTeamId3 = givenATeamWithName(TEAM3_NAME);
+        newTeamIds.add(newTeamId3);
+
+        String newTeamId4 = givenATeamWithName(TEAM4_NAME);
+        newTeamIds.add(newTeamId4);
+
+        givenASeasonDivisionWith(SEASON_NUMBER, newDivisionId, "1");
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId1);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId2);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId3);
+
+        givenASeasonDivisionTeamWith(SEASON_NUMBER, newDivisionId, newTeamId4);
+
+        String newFixtureId1 = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newTeamId1, newTeamId2);
+        newFixtureIds.add(newFixtureId1);
+
+        String newFixtureId2 = givenAFixtureWith(SEASON_NUMBER, newDivisionId, newTeamId3, newTeamId4);
+        newFixtureIds.add(newFixtureId2);
+
+        JsonObject message = new JsonObject();
+        JsonArray data = new JsonArray();
+        message.add("data", data);
+
+        JsonObject fixture1 = new JsonObject();
+        fixture1.add("attributes", new JsonObject());
+        fixture1.addProperty("id", newFixtureId1);
+        fixture1.addProperty("type", "fixtures");
+        fixture1.getAsJsonObject("attributes").addProperty("seasonNumber", SEASON_NUMBER);
+        fixture1.getAsJsonObject("attributes").addProperty("divisionId", newDivisionId);
+        fixture1.getAsJsonObject("attributes").addProperty("homeTeamId", newTeamId1);
+        fixture1.getAsJsonObject("attributes").addProperty("awayTeamId", newTeamId2);
+
+        JsonObject fixture2 = new JsonObject();
+        fixture2.add("attributes", new JsonObject());
+        fixture2.addProperty("id", newFixtureId2);
+        fixture2.addProperty("type", "fixtures");
+        fixture2.getAsJsonObject("attributes").addProperty("seasonNumber", SEASON_NUMBER);
+        fixture2.getAsJsonObject("attributes").addProperty("divisionId", newDivisionId);
+        fixture2.getAsJsonObject("attributes").addProperty("homeTeamId", newTeamId3);
+        fixture2.getAsJsonObject("attributes").addProperty("awayTeamId", newTeamId4);
+
+        data.add(fixture1);
+        data.add(fixture2);
+
+        whenBulkUpdate(BULKSAVE_FIXTURES_URL, message).
+                then().
+                statusCode(HttpStatus.SC_OK);
+    }
 }
